@@ -71,10 +71,10 @@ WhoAmI( std::string &yourName, std::string &yourEmailAddress )
 int main()
 {
 	glm::vec3 v1 = glm::vec3(0.0, 0.0, 0.0);
-	glm::vec3 v2 = glm::vec3(1.0, 0.0, 0.0);
-	glm::vec3 v3 = glm::vec3(0.0, 0.0, 1.0);
+	glm::vec3 v2 = glm::vec3(5.0, 0.0, 0.0);
+	glm::vec3 v3 = glm::vec3(0.0, 0.0, 5.0);
 
-	glm::vec3 p1 = glm::vec3(0.1, 0.0, 0.1);
+	glm::vec3 p1 = glm::vec3(-1.0, 0.0, 1.0);
 	glm::vec3 p2 = glm::vec3(9182349, 423, 0.5);
 
 	std::cout<<"UnitSurfaceNormal: " + glm::to_string(UnitSurfaceNormal(v1, v3, v2))<<std::endl;
