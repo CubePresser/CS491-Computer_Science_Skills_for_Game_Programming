@@ -4,15 +4,15 @@
 #include <cmath>
 
 #define GLM_FORCE_RADIANS
-#include "glm/vec2.hpp"
-#include "glm/vec3.hpp"
-#include "glm/mat4x4.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/matrix_inverse.hpp"
+#include "../glm/vec2.hpp"
+#include "../glm/vec3.hpp"
+#include "../glm/mat4x4.hpp"
+#include "../glm/gtc/matrix_transform.hpp"
+#include "../glm/gtc/matrix_inverse.hpp"
 
 //Remove these includes
 #include <iostream>
-#include "glm/gtx/string_cast.hpp"
+#include "../glm/gtx/string_cast.hpp"
 
 
 
