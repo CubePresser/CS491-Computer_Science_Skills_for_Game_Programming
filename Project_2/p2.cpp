@@ -17,7 +17,7 @@
 glm::mat4
 Multiply( glm::mat4 a, glm::mat4 b )
 {
-	
+	return a * b;
 }
 
 
@@ -25,7 +25,7 @@ Multiply( glm::mat4 a, glm::mat4 b )
 glm::vec3
 Multiply( glm::mat4 a, glm::vec3 b )
 {
-	
+	return glm::vec3(a * glm::vec4(b, 1.f));
 }
 
 
@@ -33,7 +33,11 @@ Multiply( glm::mat4 a, glm::vec3 b )
 glm::vec3
 ScalePointAroundAnotherPoint( glm::vec3 inputPoint, glm::vec3 centerPoint, glm::vec3 scale )
 {
-	
+	glm::mat4 translation = glm::translate(glm::mat4(1.f), -centerPoint); //Move to origin
+	glm::mat4 scale_transform = glm::scale(glm::mat4(1.f), scale); //Apply scaling
+	glm::mat4 reverse_translation = glm::inverse(translation); //Return to orignal position
+
+	return Multiply(Multiply(reverse_translation, Multiply(scale_transform, translation)), inputPoint);
 }
 
 
@@ -41,15 +45,15 @@ ScalePointAroundAnotherPoint( glm::vec3 inputPoint, glm::vec3 centerPoint, glm::
 glm::vec3
 RotatePoint( glm::vec3 inputPoint, glm::mat4 first, glm::mat4 second, glm::mat4 third )
 {
-	
+	return Multiply(Multiply(third, Multiply(second, first)), inputPoint);
 }
 
 
 void
 WhoAmI( std::string &yourName, std::string &yourEmailAddress )
 {
-	yourName = "Joe Graphics";
-	yourEmailAddress = "jgraphics@oregonstate.edu" ;
+	yourName = "Jonathan Jones";
+	yourEmailAddress = "jonesjon@oregonstate.edu" ;
 }
 
 
@@ -64,5 +68,20 @@ PrintMatrix( glm::mat4 mat )
 
 int main()
 {
+	//Initalize test variables
+	glm::vec3 p1(3, 4, 0);
+	glm::vec3 p2(1, 0, 0);
+	glm::vec3 s1(2, 2, 0);
+
+	glm::mat4 r1 = glm::rotate(glm::mat4(1.f), glm::radians(90.f), glm::vec3(0, 0, 1));
+	glm::mat4 r2 = glm::rotate(glm::mat4(1.f), glm::radians(0.f), glm::vec3(0, 0, 1));
+
+	//Display test variables
+	std::cout << "Point 1: " << glm::to_string(p1) << std::endl;
+	std::cout << "Point 2: " << glm::to_string(p2) << std::endl;
+	std::cout << "Scale 1: " << glm::to_string(s1) << std::endl;
+
+	std::cout << "Scale around point: " << glm::to_string(ScalePointAroundAnotherPoint(p1, p2, s1)) << std::endl;
+	std::cout << "Rotate point: " << glm::to_string(RotatePoint(p2, r1, r2, r1)) << std::endl;
     return 0;
 }
