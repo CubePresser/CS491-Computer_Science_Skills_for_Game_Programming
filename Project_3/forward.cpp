@@ -30,5 +30,3 @@ WhoAmI( std::string &yourName, std::string &yourEmailAddress )
         yourName = "Jonathan Jones";
         yourEmailAddress = "jonesjon@oregonstate.edu" ;
 }
-
-}
