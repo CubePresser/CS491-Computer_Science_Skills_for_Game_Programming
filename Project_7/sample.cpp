@@ -20,9 +20,6 @@
 const char *WINDOWTITLE = { "Chain Demo -- Joe Graphics" };
 const char *GLUITITLE   = { "User Interface Window" };
 
-
-
-
 const float MASSMIN =  1.f;
 const float MASSMAX =  4.f;
 
@@ -485,22 +482,32 @@ GetDerivs( struct state state[NUMNODES], struct derivatives derivs[NUMNODES] )
 			ym = state[node-1].y - state[node].y;
 		}
 
-		sumfx += 0.;		// ??????????
-		sumfy += 0.;		// ??????????
+		float length = sqrt(xm*xm + ym * ym);
+		xm /= length;
+		ym /= length;
+		float stretch = length - LENGTH0;
+		float force = K * stretch;
+		sumfx += force * xm;		
+		sumfy += force * ym;		
 
-		if( node < NUMNODES-1 )
+		if( node < NUMNODES-1 ) //Only handle the distance from next node if node is not last one
 		{
 			xp = state[node+1].x - state[node].x;
 			yp = state[node+1].y - state[node].y;
-			sumfx += 0.;		// ??????????
-			sumfy += 0.;		// ??????????
+			length = sqrt(xp*xp + yp * yp);
+			xp /= length;
+			yp /= length;
+			stretch = length - LENGTH0;
+			force = K * stretch;
+			sumfx += force * xp;
+			sumfy += force * yp;
 		}
 
 		float v = sqrt( state[node].vx*state[node].vx + state[node].vy*state[node].vy );
 		if( v > 0. )
 		{
-			sumfx -= 0.;		// ??????????
-			sumfy -= 0.;		// ??????????
+			sumfx -= Cd * state[node].vx;
+			sumfy -= Cd * state[node].vy;
 		}
 
 		derivs[node].vx = state[node].vx;
