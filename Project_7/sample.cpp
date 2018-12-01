@@ -214,12 +214,12 @@ Animate( void )
 	struct state State2[NUMNODES];
 	struct derivatives Derivatives1[NUMNODES], Derivatives2[NUMNODES];
 
-	GetDerivs( State, Derivatives1 );
+	GetDerivs( State, Derivatives1 ); //Get all the velocities and accelerations first
 
 	switch( Order )
 	{
 		case 0:		// first order
-			for( int node = 0; node < NUMNODES; node++ )
+			for( int node = 0; node < NUMNODES; node++ ) //Apply all the velocities and accelerations
 			{
 				State[node].y  = State[node].y  + Derivatives1[node].vy * Dt;
 				State[node].vy = State[node].vy + Derivatives1[node].ay * Dt;
@@ -229,7 +229,7 @@ Animate( void )
 			break;
 
 		case 1:		// second order
-			for( int node = 0; node < NUMNODES; node++ )
+			for( int node = 0; node < NUMNODES; node++ ) //Apply all the velocities and accelerations
 			{
 				State2[node].y  = State[node].y  + Derivatives1[node].vy * Dt;
 				State2[node].vy = State[node].vy + Derivatives1[node].ay * Dt;
@@ -237,9 +237,9 @@ Animate( void )
 				State2[node].vx = State[node].vx + Derivatives1[node].ax * Dt;
 			}
 
-			GetDerivs( State2, Derivatives2 );
+			GetDerivs( State2, Derivatives2 ); //Get all the velocities and accelerations with respect to the first order
 
-			for( int node = 0; node < NUMNODES; node++ )
+			for( int node = 0; node < NUMNODES; node++ ) //Apply all the velocities and accelerations
 			{
 				float aavg = ( Derivatives1[node].ay + Derivatives2[node].ay ) / 2.;
 				float vavg = ( Derivatives1[node].vy + Derivatives2[node].vy ) / 2.;
@@ -465,7 +465,7 @@ GetDerivs( struct state state[NUMNODES], struct derivatives derivs[NUMNODES] )
 {
 	for( int node = 0; node < NUMNODES; node++ )
 	{
-		float xm, ym;		// vector from bottom of node #node to preious node
+		float xm, ym;		// vector from bottom of node #node to previous node
 		float xp, yp;		// vector from bottom of node #node to next node
 
 		float sumfx = 0.;
@@ -494,7 +494,7 @@ GetDerivs( struct state state[NUMNODES], struct derivatives derivs[NUMNODES] )
 		{
 			xp = state[node+1].x - state[node].x;
 			yp = state[node+1].y - state[node].y;
-			length = sqrt(xp*xp + yp * yp);
+			length = sqrt(xp * xp + yp * yp);
 			xp /= length;
 			yp /= length;
 			stretch = length - LENGTH0;
@@ -509,7 +509,7 @@ GetDerivs( struct state state[NUMNODES], struct derivatives derivs[NUMNODES] )
 			sumfx -= Cd * state[node].vx;
 			sumfy -= Cd * state[node].vy;
 		}
-
+			
 		derivs[node].vx = state[node].vx;
 		derivs[node].ax = sumfx / Mass;
 		derivs[node].vy = state[node].vy;
@@ -540,17 +540,20 @@ InitGlui( void )
 	slider = Glui->add_slider( false, GLUI_HSLIDER_FLOAT, &X0 );
     	slider->set_float_limits( X0MIN, X0MAX );
     	slider->set_w( 200 );
+		slider->set_slider_val(X0);
 
 	Glui->add_statictext( "Y0:" );
 	slider = Glui->add_slider( false, GLUI_HSLIDER_FLOAT, &Y0 );
     	slider->set_float_limits( Y0MIN, Y0MAX );
     	slider->set_w( 200 );
+		slider->set_slider_val(Y0);
 	Glui->add_separator( );
 
 	Glui->add_statictext( "Mass:" );
 	slider = Glui->add_slider( false, GLUI_HSLIDER_FLOAT, &Mass );
     	slider->set_float_limits( MASSMIN, MASSMAX );
     	slider->set_w( 200 );
+		slider->set_slider_val(Mass);
 		fprintf(stderr, "Mass: %8.3f, %8.3f   %8.3f\n", MASSMIN, MASSMAX, Mass);
 	Glui->add_separator( );
 
@@ -558,24 +561,28 @@ InitGlui( void )
 	slider = Glui->add_slider( false, GLUI_HSLIDER_FLOAT, &K );
     	slider->set_float_limits( KMIN, KMAX );
     	slider->set_w( 200 );
+		slider->set_slider_val(K);
 	Glui->add_separator( );
 
 	Glui->add_statictext( "Damping:" );
 	slider = Glui->add_slider( false, GLUI_HSLIDER_FLOAT, &Cd );
     	slider->set_float_limits( CDMIN, CDMAX );
     	slider->set_w( 200 );
+		slider->set_slider_val(Cd);
 	Glui->add_separator( );
 
 	Glui->add_statictext( "Gravity:" );
 	slider = Glui->add_slider( false, GLUI_HSLIDER_FLOAT, &Gravity );
     	slider->set_float_limits( GMIN, GMAX );
     	slider->set_w( 200 );
+		slider->set_slider_val(Gravity);
 	Glui->add_separator( );
 
 	Glui->add_statictext( "Dt:" );
 	slider = Glui->add_slider( false, GLUI_HSLIDER_FLOAT, &Dt );
     	slider->set_float_limits( DTMIN, DTMAX );
     	slider->set_w( 200 );
+		slider->set_slider_val(Dt);
 	Glui->add_separator( );
 
 	GLUI_Panel *panel = Glui->add_panel( "Integration Order" );
