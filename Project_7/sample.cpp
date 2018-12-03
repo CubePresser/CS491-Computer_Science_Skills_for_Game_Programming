@@ -482,7 +482,7 @@ GetDerivs( struct state state[NUMNODES], struct derivatives derivs[NUMNODES] )
 			ym = state[node-1].y - state[node].y;
 		}
 
-		float length = sqrt(xm*xm + ym * ym);
+		float length = sqrt((xm*xm) + (ym * ym));
 		xm /= length;
 		ym /= length;
 		float stretch = length - LENGTH0;
@@ -494,7 +494,7 @@ GetDerivs( struct state state[NUMNODES], struct derivatives derivs[NUMNODES] )
 		{
 			xp = state[node+1].x - state[node].x;
 			yp = state[node+1].y - state[node].y;
-			length = sqrt(xp * xp + yp * yp);
+			length = sqrt((xp * xp) + (yp * yp));
 			xp /= length;
 			yp /= length;
 			stretch = length - LENGTH0;
@@ -503,7 +503,7 @@ GetDerivs( struct state state[NUMNODES], struct derivatives derivs[NUMNODES] )
 			sumfy += force * yp;
 		}
 
-		float v = sqrt( state[node].vx*state[node].vx + state[node].vy*state[node].vy );
+		float v = sqrt( (state[node].vx*state[node].vx) + (state[node].vy*state[node].vy) );
 		if( v > 0. )
 		{
 			sumfx -= Cd * state[node].vx;
